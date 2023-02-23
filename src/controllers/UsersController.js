@@ -43,12 +43,12 @@ class UsersController {
     )
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-      // check if the user is trying to change the email to an email that already exists    for another user
+      // check if the user is trying to change the email to an email that already exists for another user
       throw new AppError('Este e-mail já está em uso.')
     }
 
-    user.name = name
-    user.email = email
+    user.name = name ?? user.name
+    user.email = email ?? user.email
 
     if(password && !old_password) {
       throw new AppError("Você precisa informar a senha antiga para definir a nova senha")
@@ -72,9 +72,9 @@ class UsersController {
       name = ?,
       email = ?,
       password = ?,
-      updated_at = ?
+      updated_at = DATETIME('now')
       WHERE id = ?`,
-      [user.name, user.email, user.password, new Date(), id]
+      [user.name, user.email, user.password, id]
     )
 
     return response.json()
